@@ -27,10 +27,10 @@ public class TopicService {
 			topic = topicList.stream().filter(t -> t.getId().equals(id)).findFirst().get();
 		}
 		catch(Exception e) {
-		    throw new UserNotFoundException("id = "+id);
+		    throw new UserNotFoundException("id = '"+id+"'  could not be found");
 	    }
 		return topic;
-
+		
 	}
 	
 //	public void addTheTopic(Topic topic) {
@@ -41,14 +41,17 @@ public class TopicService {
 
 	public void putTheTopic(Topic topic, String id) {
 		topicList.forEach(item -> { 
-			      if (item.getId().equals(id))		
-			    	  topicList.set(topicList.indexOf(item), topic);
+			      if (item.getId().equals(id))	
+			    	  topicList.set(topicList.indexOf(item), topic);	     
 		});
-		return;
+		return; 
 	}
 
 	public void deleteTopicById(String id) {
-		topicList.removeIf(t -> t.getId().equals(id));		
+		boolean isDeleted = topicList.removeIf(t -> t.getId().equals(id));
+		if (!isDeleted)
+			throw new UserNotFoundException("id = '"+id+"'  could not be found");
+		
 		return;
 	}
 	
