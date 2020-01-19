@@ -15,17 +15,27 @@ public class TopicService {
 	private TopicRepository topicRepository;
 	
 	public List<Topic> getAllArrayListTopics(){
-		List<Topic> topics = new ArrayList<>();		
-		topicRepository.findAll().forEach(topics::add);		
-		return topics;
+		List<Topic> topicList = new ArrayList<>();		
+		topicRepository.findAll().forEach(topicList::add);	
+		if (topicList.isEmpty())
+			throw new UserNotFoundException("No record in the database");
+		
+		return topicList;
 	}
 	
 	public Topic getTopicById (String id) {
-		return topicRepository.findById(id).get();
+		Topic topic = null;		
+		try {
+			topic = topicRepository.findById(id).get();
+		}
+		catch(Exception ex) {
+			throw new UserNotFoundException("id = '"+id+"'  could not be found");
+		}		
+		return topic;			
 	}
 	
-	public void addTheTopic(Topic topic) {
-		topicRepository.save(topic);
+	public Topic addTheTopic(Topic topic) {
+		return topicRepository.save(topic);
 	}
 
 	public void updateTopic(Topic topic, String id) {	
@@ -38,7 +48,9 @@ public class TopicService {
 	}
 
 	public void deleteTopicById(String id) {
-		topicRepository.deleteById(id);		
+		Topic topic = this.getTopicById(id);
+		if (topic != null)
+		     topicRepository.deleteById(id);		
 	}
 	
 }

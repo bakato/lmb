@@ -27,7 +27,7 @@ public class Course {
 		this.name = name;
 		this.description = description;
 		
-		this.topic = new Topic(topicId, "", "");
+		this.topic = new Topic(topicId, "", "", null);
 	}
 
 	public String getId() {
